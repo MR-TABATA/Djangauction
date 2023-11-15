@@ -1,0 +1,53 @@
+{% extends "management/common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+
+<div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body py-3">
+
+            <form action="{% url 'management:create_item' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" name="csv">
+            <button type="submit" class="btn btn-primary btn-sm mt-2 w-25" name="button">アップロード</button>
+            </form>
+
+            <p class="card-description mt-3">CSVフォーマットは以下</p>
+            <div class="row">
+                <div class="col-md-12"> code,type,featured,item_name,serial,estimate,custom_user,description,maker,start_price</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IW669,L,1 ,ヘリアー 50/2(L) 限定,A090,6AH,358,詳細,VO,65000/div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IW668,L,1 ,MSゾンネタール 73/1.5(M) シルバー,1285,7H,358,詳細,XX,70000</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IT056,L,1 ,MZD 45/1.8 BL,80392,7,358,詳細,OL,12000</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IT055,L,1 ,MZD 25/1.8 BL,345223009,7,358,詳細,OL,15000</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IT054,B,1 ,E-M1 mk2,9325,7,358,詳細,OL,37000</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">IT053,L,3 ,G 45-175/PZ BL,201305,7,358,詳細,PA,15000</div>
+            </div>
+             <p class="card-description mt-3">Ecelフォーマットは以下</p>
+            <img width="600" height-auto src="{% url 'config:file_view' 'csv_file_format.jpg' %}" />
+            <p class="card-description mt-3">終了日時は、公開時に入力します（終了日時が入力・保存されると公開されます）</p>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

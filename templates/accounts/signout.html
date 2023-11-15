@@ -1,0 +1,26 @@
+{% extends "common/base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block bootstrap5_title %}{{ SITE_NAME }} | パスワード変更終了{% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<main>
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <h3 class="pb-4 mb-4 fst border-bottom mi-l"><i class="fa-solid fa-user-lock"></i>{{ SITE_NAME }} パスワード変更終了</h3>
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header">
+          <h3 class="text-center font-weight-light my-4">サインアウト</h3></div>
+        <div class="card-body">
+          <p>サインアウトしました。</p>
+          <p>ご利用ありがとうございました。</p>
+          <hr class='mt-2 mb-2'>
+          <p><a href="{% url 'accounts:signin' %}">もう一度サインインする</a></p>
+          <p><a href="{% url 'home:index' %}">Topに戻る</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,45 @@
+{% extends "common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+
+<!-- Features section-->
+<section class="py-5 id="features">
+    <div class="container px-5 my-5">
+        <h2 class="pb-2 mb-5 fw-bolder text-center border-bottom">お気に入り</h2>
+        <div class="row mb-3 pb-2 pt-2 bg-light">
+            <div class="col-md-2">No メーカー名</div>
+            <div class="col-md-4">アイテム名</div>
+            <div class="col-md-2">シリアル</div>
+            <div class="col-md-2">アクセス/入札</div>
+            <div class="col-md-2 text-end">スタート/トップ</div>
+        </div>
+        {% for watch in watches %}
+            <div class="row mb-2">
+                <div class="col-md-2">{{forloop.counter}}<span class="ps-3">{{watch.maker_name}}</span></div>
+                <div class="col-md-4"><a href="{% url 'auction:detail' watch.item_id  %}" class="text-decoration-none">{{watch.item_name}}</a></div>
+                <div class="col-md-2">{% if watch.serial  %}{{ watch.serial }}{% endif %}</div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 text-center">{{watch.access_count}}</div>
+                        <div class="col-md-4 text-center">{{watch.bid_count}}</div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    {% if watch.win_price == 0 %}
+                        <p class="h5 text-end fw-mediumv text-danger">¥ {{watch.start_price|intcomma}}</p>
+                    {% else %}
+                        <p class="h5 text-end fw-mediumv text-success">¥ {{watch.win_price|intcomma}}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

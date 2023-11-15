@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block bootstrap5_title %}{{ SITE_NAME }} | プロフィール{% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<h5 class="pb-4 mb-4 fst border-bottom">{{ SITE_NAME }} プロフィール</h5>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <img src="{% url 'accounts:media' %}" width="128px" height="128px">
+        <h5 class="my-3">{{ user.username }}</h5>
+        <p class="text-muted mb-1">{{ user.occupation }}</p>
+        <p class="text-muted mb-4">{{ user.company }}{{ user.department }}</p>
+        <div class="d-flex justify-content-center mb-2">
+          <a href="{% url 'accounts:profile_edit' user.pk %}" button type="button" class="btn btn-primary w-100">プロフィール編集</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">ユーザー名</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.username }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">名前</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.last_name }}　{{ user.first_name }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">Email</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.email }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">Mobile</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.mobile }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">組織</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.company }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">部門・部署</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.department }}</p></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3"><p class="mb-0">役職・職種</p></div>
+          <div class="col-sm-9"><p class="text-muted mb-0">{{ user.position }}{{ user.occupation }}</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

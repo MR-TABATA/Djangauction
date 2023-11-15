@@ -1,0 +1,31 @@
+{% extends "common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+
+<!-- Features section-->
+<section class="py-5 id="features">
+    <div class="container px-5 my-5">
+        <h2 class="pb-2 mb-5 fw-bolder text-center border-bottom">取引履歴</h2>
+        {% for history in histories %}
+            {% with index=forloop.counter0 %} <!-- index を取得 -->
+                {% if index|mod:3 == 0 %} <div class="row mb-2 w-100"> {% endif %}
+                    <div class="col-xl-4 col-md-4">
+                      <div class="card-body d-flex align-items-center justify-content-between">
+                          <div class="col-md-6"> <a href="#">{{ history.date|date:"Y-m-d" }}</a></div>
+                          <div class="col-md-2 text-end"> {{ history.count }}点</div>
+                          <div class="col-md-4 text-end"> {{ history.sum|intcomma }}円</div>
+                      </div>
+                    </div>
+                {% if index|mod:3 == 2 %} </div> {% endif %}
+            {% endwith %}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

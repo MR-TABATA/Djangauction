@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block bootstrap5_title %}{{ SITE_NAME }} | プロフィール編集 {% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<h5 class="pb-4 mb-4 fst border-bottom">{{ SITE_NAME }} プロフィール編集</h5>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <img src="/media/{{ user.avater }}" width="128px" height="128px">
+        <h5 class="my-3">{{ user.username }}</h5>
+        <p class="text-muted mb-1">{{ user.occupation }}</p>
+        <p class="text-muted mb-4">{{ user.company }}{{ user.department }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card mb-4">
+      <div class="card-body">
+        <form action="" method="POST" enctype="multipart/form-data">
+          {{ form.non_field_errors }}
+          {% bootstrap_form form %}
+          <p><img src="{% url 'accounts:media' %}" width="128px" height="128px"></p>
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-lg w-50">更新する</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

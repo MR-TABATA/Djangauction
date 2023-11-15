@@ -1,0 +1,107 @@
+{% extends "common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+
+<!-- Features section-->
+<section class="py-5" id="features">
+    {% if items %}
+        <div class="container px-5 my-5">
+            <h3 class="pb-2 mb-3 fw-bolder text-center">{{ close }} 終了のオークション 入落札</h3>
+            <div class="row mb-3 bg-light text-dark pb-2 g-2 px-2 border">
+                <div class="col-md-2">メーカー名</div>
+                <div class="col-md-4">アイテム名</div>
+                <div class="col-md-2 text-end pe-3">落札金額</div>
+                <div class="col-md-2 text-end pe-3">入札金額</div>
+            </div>
+            {% for item in items %}
+                {% if item.custom_user_id == user.pk %}
+                <div class="row mb-3 bg-light pb-2 g-3 border-bottom">
+                {% else %}
+                <div class="row mb-3 pb-2 g-3 border-bottom">
+                {% endif %}
+                    <div class="col-md-2">{{ item.maker_name }}</div>
+                    <div class="col-md-4"><a href="{% url 'auction:detail' item.id %}">{{ item.item_name }}</a></div>
+                    <div class="col-md-2 text-end pe-3">{{ item.win_price|intcomma }}円</div>
+                    <div class="col-md-2 text-end pe-3">{{ item.max|intcomma }}円</div>
+                </div>
+            {% endfor %}
+            {% for summary in summaries %}
+                <div class="row mb-2">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-3">落札金額合計</div>
+                    <div class="col-md-2 text-end pe-3">{{ bidding_win_sum|intcomma }}円</div>
+                </div>
+            {% endfor %}
+            <div class="row mb-2">
+                <div class="col-md-5"></div>
+                <div class="col-md-3">落札点数</div>
+                <div class="col-md-2 text-end pe-3">{{ bidding_win_count }}点</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5"></div>
+                <div class="col-md-3">落札手数料（＠{{ bidding_unit_fee|intcomma }}円 x {{ bidding_win_count }}点）</div>
+                <div class="col-md-2 text-end pe-3">{{ bidding_fee|intcomma }}円</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5"></div>
+                <div class="col-md-3">合計</div>
+                <div class="col-md-2 text-end pe-3"><span class="text-decoration-underline h5"> {{ bidding_total|intcomma }}円</span></div>
+            </div>
+        </div>
+    {% endif %}
+    {% if commits %}
+        <div class="container px-5 my-5">
+            <h3 class="pb-2 mb-3 fw-bolder text-center">{{ close }} 終了のオークション 成約</h3>
+            <div class="row mb-3 bg-light text-dark pb-2 g-2 px-2 border">
+                <div class="col-md-2">メーカー名</div>
+                <div class="col-md-4">アイテム名</div>
+                <div class="col-md-1">アクセス数</div>
+                <div class="col-md-1">入札数</div>
+                <div class="col-md-2 text-end pe-3">落札金額</div>
+                <div class="col-md-1 text-end pe-3">開始金額</div>
+            </div>
+            {% for commit in commits %}
+                {% if item.custom_user_id == user.pk %}
+                <div class="row mb-3 bg-light pb-2 g-3 border-bottom">
+                {% else %}
+                <div class="row mb-3 pb-2 g-3 border-bottom">
+                {% endif %}
+                    <div class="col-md-2">{{ commit.maker_name }}</div>
+                    <div class="col-md-4"><a href="{% url 'auction:detail' commit.id %}">{{ commit.item_name }}</a></div>
+                    <div class="col-md-1">{{ commit.access_count }}</div>
+                    <div class="col-md-1">{{ commit.bid_count }}</div>
+                    <div class="col-md-2 text-end pe-3">{{ commit.win_price|intcomma }}円</div>
+                    <div class="col-md-1 text-end pe-3">{{ commit.start_price|intcomma }}円</div>
+                </div>
+            {% endfor %}
+            <div class="row mb-2">
+                <div class="col-md-6 text-end">落札合計金額</div>
+                <div class="col-md-1"></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2 text-end pe-3">{{ commit_summary.sum_win_price|intcomma }}円</div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6 text-end">成約料</div>
+                <div class="col-md-1">＠{{ fee.fee.commission|intcomma }}円</div>
+                <div class="col-md-1">{{ commision_count }}点</div>
+                <div class="col-md-2 text-end pe-3">{{ commision_fee|intcomma }}円</div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6 text-end">成約合計</div>
+                <div class="col-md-1"></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2 text-end pe-3"><span class="text-decoration-underline h5"> {{ commit_total|intcomma }}円</span></div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+    {% endif %}
+</section>
+
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

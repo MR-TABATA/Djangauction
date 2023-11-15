@@ -1,0 +1,29 @@
+{% extends "common/base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block bootstrap5_extra_head %}
+  <link href="{% static "css/signin.css" %}" rel="stylesheet" />
+{% endblock %}
+{% block bootstrap5_title %}{{ SITE_NAME }} | サインイン{% endblock %}
+{% block content %}
+
+
+<div class="p-4">
+<div class="container">
+  <div class="row">
+    <div class="col-md-5 col-sm-6 col-lg-3 mx-auto">
+      <div class="formContainer">
+        <h2 class="p-2 text-center mb-4 h4 text-white" id="formHeading">サインイン</h2>
+        <form method="post">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          {% bootstrap_button button_type="submit" content="サインインする" %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,205 @@
+{% extends "common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <style>
+
+    </style>
+{% endblock stylesheets %}
+{% block content %}
+
+
+<!-- Features section-->
+<section class="py-5 mt-5">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        {% for crumb in crumbs %}
+            {% if crumb.1 != '' %}
+              <li class="breadcrumb-item"><a href="{% url crumb.1 %}">{{ crumb.0 }}</a></li>
+            {% else %}
+              <li class="breadcrumb-item active">{{ crumb.0 }}</li>
+            {% endif %}
+          {% endfor %}
+      </ol>
+    </nav>
+    <div class="row gx-5">
+      <aside class="col-lg-6">
+        <a data-fancybox="gallery" data-src="{% url 'config:main_file_view' item.item.code %}">
+            <img width="600" height-auto class="small-preview" src="{% url 'config:main_file_view' item.item.code %}" />
+        </a>
+        <a data-fancybox="gallery" data-src="{% url 'config:estimate_file_view' item.item.code %}">
+            <img width="80" height-auto class="small-preview" src="{% url 'config:estimate_file_view' item.item.code %}" />
+        </a>
+        {% for thumsbnail_alpha in thumsbnail_alphas %}
+            <a data-fancybox="gallery" data-src="{% url 'config:thumsbnail_file_view' item.item.code thumsbnail_alpha %}">
+                  <img width="80" height-auto src="{% url 'config:thumsbnail_file_view' item.item.code thumsbnail_alpha %}" />
+            </a>
+        {% endfor %}
+      </aside>
+      <main class="col-lg-6">
+        <div class="ps-lg-3">
+          <div class="h2 mb-0 fw-bolder text-center">{{ item.item.maker.maker_name }}</div>
+          <div class="h2 pb-2 fw-bolder text-center border-bottom">{{ item.item.item_name }}</div>
+
+          {% if item.item.featured %}
+          <div class="d-flex flex-row my-3">
+            <div class="mb-1 me-2">おすすめ度：
+              {% with ''|center:item.item.featured as range %}
+              {% for _ in range %}
+              <i class="bi bi-star-fill text-warning"></i>
+              {% endfor %}
+              {% endwith %}
+              <span class="ms-1 text-warning">
+                {{ item.item.featured|intcomma }}
+              </span>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="row">
+            {% if item.win_price == 0 %}
+                <dt class="col-4">フロア・プライス：</dt>
+                <dd class="col-8"><span class="h5 fw-mediumv text-danger">¥ {{item.item.start_price|intcomma}}</span><span class="text-muted"> </span></dd>
+
+            {% else %}
+
+                <div class="row">
+                  <dt class="col-4">トップ入札者：</dt>
+                  <dd class="col-8" id="top_bidder">
+                      {% if user.pk == item.custom_user_id %}あなた{% else %}{{ item.custom_user_id }}{% endif %}
+                  </dd>
+
+                  <dt class="col-4">トップ金額：</dt>
+                  <dd class="col-8" id="win_price">
+                      <span class="h5 fw-mediumv text-success" id="win_price">¥ {{item.win_price|intcomma}}</span><span class="text-muted"></span>
+                      {% if user.pk == item.custom_user_id %}（¥{{ bid.bid_price }}まで、あなたがトップ）{% endif %}
+                  </dd>
+                </div>
+            {% endif %}
+          </div>
+
+          <form method="post" action="">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-4 col-6">
+                {% bootstrap_form form %}
+            </div>
+            <!-- col.// -->
+            <div class="col-md-4 col-6">
+                {% bootstrap_button button_type="submit" content="入札する" %}
+            </div>
+            <div id="notice" class="text-danger"></div>
+          </div>
+          </form>
+        　
+          {% if item.item.description %}
+          <p style="line-height: 1.7;">{{ item.item.description|linebreaksbr }}</p>
+          {% endif %}
+          <div class="row">
+            <dt class="col-3">終了日時:</dt>
+            <dd class="col-9">{{ item.item.close|date:"Y-m-d H:i:s" }}</dd>
+
+            <dt class="col-3">製造番号</dt>
+            <dd class="col-9">{{ item.item.serial }}</dd>
+
+            <dt class="col-3">アクセス数</dt>
+            <dd class="col-9">{{ item.access_count }}</dd>
+
+            <dt class="col-3">入札数</dt>
+            <dd class="col-9" id="bid_count">{{ item.bid_count }}</dd>
+
+            <dt class="col-3">お気に入り</dt>
+            {% if is_watch %}
+              <dd class="col-9">登録済みです</dd>
+            {% else %}
+              <dd class="col-9"><a href="" class="btn btn-sm btn-outline-success">登録する</a> </dd>
+            {% endif %}
+
+          </div>
+
+          <hr />
+
+          <h5 class="pb-2 mb-3 fw-bolder">入札履歴</h5>
+            {% for bid_history in bid_histories %}
+                {% with index=forloop.counter %}
+                <div class="row mb-3 border-bottom">
+                    <div class="col-md-1">{{ index }}</div>
+                    <div class="col-md-6">{{ bid_history.created|date:"Y-m-d H:i:s.u" }}</div>
+                    <div class="col-md-2">¥{{ bid_history.history_price|intcomma }}</div>
+                    <div class="col-md-3 text-center">{% if user.pk == bid_history.custom_user_id %}あなた{% else %}{{ bid_history.custom_user_id }}{% endif %}</div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+        </div>
+      </main>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+      Fancybox.bind('[data-fancybox="gallery"]', {
+        //
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    // 送信ボタンにイベントリスナーを設定。内部に Ajax 処理を記述
+    $("form").submit(function(event) {
+        event.preventDefault();
+        var form = $(this);
+        $.ajax({
+          url: form.prop("action"),
+          method: form.prop("method"),
+          data: form.serialize(),
+          timeout: 10000,
+          dataType: "json",
+        })
+        .done(function(response){
+            $('#win_price').html(response.win_price);
+            $('#notice').html(response.notice);
+            $('#bid_count').html(response.bid_count);
+            $('#top_bidder').html(response.top_bidder);
+        });
+
+    });
+    </script>
+{% endblock javascripts %}

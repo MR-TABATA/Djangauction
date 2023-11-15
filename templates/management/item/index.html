@@ -1,0 +1,56 @@
+{% extends "management/common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+{{ post_data }}
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        {% for key, errors in form.errors.items %}
+    {% for error in errors %}
+        {{ error }}
+    {% endfor %}
+{% endfor %}
+        {{ er }}
+        <div class="card-body py-3">
+          <div class="row py-1">
+            <div class="col-md-1">当社番号</div>
+            <div class="col-md-1">B/L/X</div>
+            <div class="col-md-1">注目度</div>
+            <div class="col">アイテム名</div>
+            <div class="col">製造番号</div>
+            <div class="col-md-1">評価</div>
+            <div class="col-md-1">出品者</div>
+            <div class="col">詳細</div>
+            <div class="col-md-1">メーカー</div>
+            <div class="col-md-1">スタート</div>
+          </div>
+
+          <form method="post">
+          {% for form in edit_formset %}
+          <div class="row py-1">
+            <div class="col-md-1">{{ form.code }}</div>
+            <div class="col-md-1">{{ form.type }}</div>
+            <div class="col-md-1">{{ form.featured }}</div>
+            <div class="col">{{ form.item_name }}</div>
+            <div class="col">{{ form.serial }}</div>
+            <div class="col-md-1">{{ form.estimate }}</div>
+            <div class="col">{{ form.custom_user }}</div>
+            <div class="col-md-1">{{ form.description }}</div>
+            <div class="col-md-1">{{ form.maker }}</div>
+            <div class="col-md-1">{{ form.start_price }}</div>
+          </div>
+          {% endfor %}
+          {{ edit_formset.management_form }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-sm mt-2 w-25" name="button">一括更新</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}
+

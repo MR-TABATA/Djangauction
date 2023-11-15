@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container px-5">
+    <a class="navbar-brand" href="/">{{ title }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 me-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link " href="{% url 'auction:rule' %}">規約</a></li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item me-5"><a class="nav-link " href="{% url 'auction:transaction' %}">過去の取引</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:index' %}">取引履歴</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'auction:index' %}">オークション</a></li>
+          <li class="nav-item"><a class="nav-link " href="{% url 'auction:watch' %}">お気に入り</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="dropdown-center">
+      <button class="btn dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ user.company_name }}
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">パスワード変更</a></li>
+        <li><a class="dropdown-item" href="#">アカウント情報</a></li>
+        <li><a class="dropdown-item" href="{% url 'accounts:signout' %}">サインアウト</a></li>
+      </ul>
+    </div>
+    {% else %}
+        <a class="btn btn-outline-light btn-sm text-white ms-5" href="{% url 'accounts:signin' %}">サインイン</a>
+    {% endif %}
+  </div>
+</nav>

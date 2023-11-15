@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+
+<div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body py-3">
+            <form action="{% url 'management:upload_image' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" name="image" multiple>
+            <button type="submit" class="btn btn-primary btn-sm mt-2 w-25" name="button">アップロード</button>
+            </form>
+
+            <p class="text-muted mt-3">複数ファイルアップロード可能<br />
+            画像フォーマットはJpegファイル（拡張子：jpg）</p>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

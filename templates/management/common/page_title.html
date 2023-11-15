@@ -1,0 +1,15 @@
+<div class="pagetitle">
+  <h1>{{ title }}</h1>
+  <nav>
+    <ol class="breadcrumb mt-2">
+      <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+      {% for crumb in crumbs %}
+        {% if crumb.1 != '' %}
+          <li class="breadcrumb-item"><a href="{% url crumb.1 %}">{{ crumb.0 }}</a></li>
+        {% else %}
+          <li class="breadcrumb-item active">{{ crumb.0 }}</li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </nav>
+</div><!-- End Page Title -->

@@ -1,0 +1,109 @@
+{% extends "common/base.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+
+<!-- Features section-->
+<section class="py-5 id="features">
+    <div class="container px-5 my-5">
+
+        <form method="get">
+        <div class="row mb-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-3 text-center">
+                {% csrf_token %}
+                <select name="maker_id" class="form-select">
+                <option value="">メーカー選択</option>
+                {% for maker in maker_count %}
+                    <option value="{{ maker.id }}" {% if maker and maker.id == selected_maker.id %} selected{% endif %}>{{ maker.maker_name }}（{{ maker.count|intcomma }}）</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="submit" name="submit" value="検索" class="btn btn-primary w-50">
+            </div>
+
+        </div>
+        </form>
+        <h2 class="pb-2 mb-3 fw-bolder text-center border-bottom">注目・おすすめアイテム</h2>
+        {% for value in featured %}
+            {% if value.item.featured == 3 %}
+                {% with index=forloop.counter0 %} <!-- index を取得 -->
+                    {% if index|mod:4 == 0 %} <div class="row mt-5"> {% endif %}
+                        <div class="col-lg-3 mb-5 mb-lg-0">
+                            <div class="text-center mb-2">
+                                <img src="{% url 'config:main_file_view' value.item.code %}" class="border" width="210" height-auto>
+                            </div>
+                            <h5 class="fw-mediumv text-center">{{value.item.maker.maker_name}}</h5>
+                            <h5 class="fw-mediumv text-center">{{value.item.item_name}}</h5>
+                            <p class="text-center">
+                              {% with ''|center:value.item.featured as range %}
+                              {% for _ in range %}
+                              <i class="bi bi-star-fill text-warning"></i>
+                              {% endfor %}
+                              {% endwith %}
+                            </p>
+                            {% if value.win_price == 0 %}
+                                <p class="h5 text-center fw-mediumv text-danger">¥ {{value.item.start_price|intcomma}}</p>
+                            {% else %}
+                                <p class="h5 text-center fw-mediumv text-success">¥ {{value.win_price|intcomma}}</p>
+                            {% endif %}
+                            <p class="text-center"><a class="btn btn-outline-primary px-5" href="{% url 'auction:detail' value.item.pk  %}">詳細</a></p>
+                            </div>
+                    {% if index|mod:4 == 3 %} </div> {% endif %}
+                {% endwith %}
+            {% elif value.item.featured == 1 %}
+                {% with index=forloop.counter0 %} <!-- index を取得 -->
+                    {% if index|mod:4 == 0 %} <div class="row gx-5 mb-5 mt-5"> {% endif %}
+                        <div class="col-lg-3 mb-5 mb-lg-0">
+                            <h5 class="fw-mediumv text-center">{{value.item.maker.maker_name}}</h5>
+                            <h5 class="fw-mediumv text-center">{{value.item.item_name}}</h5>
+                            <p class="text-center">
+                              {% with ''|center:value.item.featured as range %}
+                              {% for _ in range %}
+                              <i class="bi bi-star-fill text-warning"></i>
+                              {% endfor %}
+                              {% endwith %}
+                            </p>
+                            {% if value.win_price == 0 %}
+                                <p class="h5 text-center fw-mediumv text-danger">¥ {{value.item.start_price|intcomma}}</p>
+                            {% else %}
+                                <p class="h5 text-center fw-mediumv text-success">¥ {{value.win_price|intcomma}}</p>
+                            {% endif %}
+                            <p class="text-center"><a class="btn btn-outline-primary px-5" href="{% url 'auction:detail' value.item.pk  %}">詳細</a></p>
+                        </div>
+                    {% if index|mod:4 == 3 %} </div> {% endif %}
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="border-bottom" id="features">
+    <div class="container px-5">
+        <h2 class="pb-2 mb-5 fw-bolder text-center border-bottom">出品アイテム一覧</h2>
+        {% for value in items %}
+
+                {% with index=forloop.counter0 %} <!-- index を取得 -->
+                    {% if index|mod:4 == 0 %} <div class="row gx-5 mb-5"> {% endif %}
+                        <div class="col-lg-3 mb-5 mb-lg-0">
+                            <a href="{% url 'auction:detail' value.item.pk  %}" class="text-decoration-none">
+                            <h5 class="fw-mediumv text-center">{{value.item.maker.maker_name}}</h5>
+                            <h5 class="fw-mediumv text-center">{{value.item.item_name}}</h5>
+                            </a>
+                            {% if value.win_price == 0 %}
+                                <p class="h5 text-center fw-mediumv text-danger">¥ {{value.item.start_price|intcomma}}</p>
+                            {% else %}
+                                <p class="h5 text-center fw-mediumv text-success">¥ {{value.win_price|intcomma}}</p>
+                            {% endif %}
+                        </div>
+                    {% if index|mod:4 == 3 %} </div> {% endif %}
+                {% endwith %}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,179 @@
+{% extends "common/base_print.html" %}
+{% load humanize %}
+{% load mathfilters %}
+{% load utility %}
+{% load static %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+
+<section class="page">
+    <table class="mb-2">
+        <tr><td class="text-end">{{ stats.0.item__close | date:"Y年m月j日" }}</td></tr>
+        <tr><td class="text-center">ご請求書</td></tr>
+        <tr><td>{{ auction_user.company_name }} 御中</td></tr>
+    </table>
+
+    <table>
+        <tr>
+            <td class="align-top">
+                <table>
+                    <tr>
+                        <td class="align-top">件名：</td>
+                        <td>{{ stats.0.item__close | date:"Y年m月j日" }}終了オークション</td>
+                    </tr>
+                    <tr>
+                        <td>お支払期限：</td>
+                        <td>{{ stats.0.item__close | get_last_date |date:"Y年m月j日" }}</td>
+                    </tr>
+                </table>
+            </td>
+            <td class="align-top">
+                <table>
+                    <tr>
+                        <td>
+                            <p class="mb-0 text-end">
+                            〒123-4567<br />
+                            東京都港区七本木 1-2-3<br />
+                            株式会社AuctionHub
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table style="width: 50%">
+        <tr>
+            <td class="py-2 px-3 border bg-dark text-white" style="width: 40%">ご請求金額</td>
+            <td class="border text-end pe-3 billing">{{ invoice_price }}円</td>
+        </tr>
+    </table>
+    <table class="table table-striped mt-2 border" style="width: 100%;">
+        <tbody class="table-group-divider">
+        <tr>
+            <td class="w-50 ps-5">落札点数</td><td class="w-50 pe-5 text-end">{{ bidding_count }}点</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">落札手数料</td><td class="w-50 pe-5 text-end">{{ bidding_fee }}円</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">落札金額</td><td class="w-50 pe-5 text-end">{{ bidding_sum }}円</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">落札合計金額</td><td class="w-50 pe-5 text-end">{{ bidding_total }}円</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped mt-2 border" style="width: 100%;">
+        <tbody class="table-group-divider">
+        <tr>
+            <td class="w-50 ps-5">成約点数</td><td class="w-50 pe-5 text-end">{{ commiting_count }}点</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">成約手数料</td><td class="w-50 pe-5 text-end">{{ commiting_fee }}円</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">成約金額</td><td class="w-50 pe-5 text-end">{{ commiting_sum }}円</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">成約合計金額</td><td class="w-50 pe-5 text-end">{{ commiting_total }}円</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped mt-2 border" style="width: 100%;">
+        <tr>
+            <td class="w-50 ps-5">相殺額</td><td class="w-50 pe-5 text-end">{{ offset_total }}円</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">消費税</td><td class="w-50 pe-5 text-end">{{ tax_price }}円</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tr>
+            <td class="py-2 ps-5 border-bottom" style="width: 100%">振込先</td>
+        </tr>
+    </table>
+    <table class="table mt-2" style="width: 100%;">
+        <tr>
+            <td class="w-50 ps-5">金融機関名 / 支店名</td><td class="w-50 pe-5 text-end">東京三井銀行 / 九段上支店</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">店番号/口座番号</td><td class="w-50 pe-5 text-end">999 / 998108</td>
+        </tr>
+        <tr>
+            <td class="w-50 ps-5">名義</td><td class="w-50 pe-5 text-end">株式会社犬飼小次郎</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+{% with ''|center:page as range %}
+{% for _ in range %}
+    <section class="page">
+        <table class="mb-2">
+            <tr><td class="text-end">{{ stats.0.item__close | date:"Y年m月j日" }}</td></tr>
+            <tr><td class="text-center">ご請求書　明細　{{ forloop.counter }}/{{ page }}</td></tr>
+            <tr><td>{{ stats.0.custom_user__company_name }} 御中</td></tr>
+        </table>
+
+        <table>
+            <tr>
+                <td class="align-top">
+                    <table>
+                        <tr>
+                            <td class="align-top">件名：</td>
+                            <td>{{ stats.0.item__close | date:"Y年m月j日" }}終了オークション</td>
+                        </tr>
+                        <tr>
+                            <td>お支払期限：</td>
+                            <td>{{ stats.0.item__close | get_last_date |date:"Y年m月j日" }}</td>
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="align-top">
+                    <table>
+                        <tr>
+                            <td>
+                                <p class="mb-0 text-end">
+                                〒123-4567<br />
+                                東京都港区七本木 1-2-3<br />
+                                株式会社AuctionHub
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-striped mt-2">
+            <thead>
+            <tr class="price">
+                <td>コード</td>
+                <td>品目</td>
+                <td>落札金額</td>
+                <td>成約金額</td>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            {% for stat in stats %}
+                {% if forloop.counter >= forloop.parentloop.counter0|multiplePlusOne:15 and forloop.counter <= forloop.parentloop.counter|multiplePlus:15 %}
+                <tr class="price">
+                <td>{{ stat.item__code }}</td>
+                <td>{{ stat.item__maker__maker_name }} {{ stat.item__item_name }}</td>
+                <td style="width: 100px;">{% if stat.custom_user == auction_user.pk %}¥ {{ stat.win_price }}{% endif %}</td>
+                <td style="width: 100px;">{% if stat.item__custom_user == auction_user.pk %}¥ {{ stat.win_price }}{% endif %}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+{% endfor %}
+{% endwith %}
+
+{% endblock content %}
