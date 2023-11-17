@@ -69,7 +69,7 @@ class DetailView(LoginRequiredMixin, FormView):
       ['Auction Detail', ''],
     ]
     #watch
-    context['is_watch'] = Watch.objects.filter(item_id=self.kwargs['pk'], custom_user_id=self.request.user.pk).first()
+    context['is_watch'] = Watch.objects.filter(deleted__isnull=True, item_id=self.kwargs['pk'], custom_user_id=self.request.user.pk).first()
 
     # アクセス数
     stat_data = Stat.objects.filter(item_id=self.kwargs['pk'], deleted__isnull=True).first()
